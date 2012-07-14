@@ -118,11 +118,6 @@ PRODUCT_COPY_FILES +=  \
     vendor/cm/proprietary/lib/x86/libjackpal-androidterm4.so:system/lib/libjackpal-androidterm4.so
 endif
 
-# Bring in camera effects
-PRODUCT_COPY_FILES +=  \
-    vendor/cm/prebuilt/common/media/LMprec_508.emd:system/media/LMprec_508.emd \
-    vendor/cm/prebuilt/common/media/PFFprec_600.emd:system/media/PFFprec_600.emd
-
 # Enable SIP+VoIP on all targets
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml
@@ -149,7 +144,6 @@ PRODUCT_PACKAGES += \
 
 # Optional CM packages
 PRODUCT_PACKAGES += \
-    VideoEditor \
     VoiceDialer \
     SoundRecorder \
     Basic
@@ -160,9 +154,6 @@ PRODUCT_PACKAGES += \
     DSPManager \
     libcyanogen-dsp \
     audio_effects.conf \
-    CMWallpapers \
-    Apollo \
-    CMUpdater \
     CMFileManager
 
 # Extra tools in CM
