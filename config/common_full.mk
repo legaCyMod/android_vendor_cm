@@ -12,11 +12,12 @@ include vendor/cm/config/cm_audio.mk
 
 # Optional CM packages
 PRODUCT_PACKAGES += \
-    HoloSpiralWallpaper \
-    MagicSmokeWallpapers \
-    NoiseField \
     Galaxy4 \
+    HoloSpiralWallpaper \
     LiveWallpapers \
     LiveWallpapersPicker \
+    MagicSmokeWallpapers \
+    NoiseField \
+    PhaseBeam \
     VisualizationWallpapers \
-    PhaseBeam
+    PhotoTable
