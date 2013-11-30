@@ -10,9 +10,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.config.notification_sound=F1_New_SMS.ogg \
     ro.config.alarm_alert=Alarm_Beep_03.ogg
 
-PRODUCT_PACKAGES += \
-    Mms
-
 ifeq ($(TARGET_SCREEN_WIDTH) $(TARGET_SCREEN_HEIGHT),$(space))
     PRODUCT_COPY_FILES += \
         vendor/cm/prebuilt/common/bootanimation/320.zip:system/media/bootanimation.zip
