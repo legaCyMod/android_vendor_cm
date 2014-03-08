@@ -36,4 +36,15 @@ DELETE_BINS="applypatch applypatch_static check_prereq recovery updater"
 # We should fix the build to stop this from being installed in the first place
 rm -rf "$OUT"/system/extras
 
+# Delete files defined in custom squisher extras list
+VENDOR=$(cat "$OUT"/system/build.prop | grep 'ro.product.brand=' | tr '[:upper:]' '[:lower:]' | sed 's/ro.product.brand=//')
+DEVICE=$(cat "$OUT"/system/build.prop | grep 'ro.build.product=' | tr '[:upper:]' '[:lower:]' | sed 's/ro.build.product=//')
+SQUISHER_EXTRAS_FILE="$ANDROID_BUILD_TOP/device/$VENDOR/$DEVICE/squisher-extras.txt"
+if [ -f "$SQUISHER_EXTRAS_FILE" ]; then
+    for FILE in `cat "$SQUISHER_EXTRAS_FILE" | grep -v ^# | grep -v ^$`; do
+        EXTRAS="$EXTRAS $FILE"
+    done
+    ( cd "$OUT"/system; echo $EXTRAS | xargs rm -f; )
+fi
+
 exit 0
