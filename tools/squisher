@@ -23,28 +23,32 @@ if [ -z "$OUT" -o ! -d "$OUT" ]; then
     exit 1
 fi
 
-OPTICHARGER="$ANDROID_BUILD_TOP"/vendor/cm/tools/opticharger
-QUIET=-q
-DELETE_BINS="applypatch applypatch_static check_prereq recovery updater"
-
 # Optimize PNG resources in APKs
+OPTICHARGER="$ANDROID_BUILD_TOP"/vendor/cm/tools/opticharger
 ( cd "$OUT"/system; find framework/ app/ priv-app/ vendor/app/ -name \*.apk -print | $XARGS "$OPTICHARGER"; )
-
-# Delete unnecessary binaries
-( cd "$OUT"/system/bin; echo $DELETE_BINS | xargs rm -f; )
-
-# We should fix the build to stop this from being installed in the first place
-rm -rf "$OUT"/system/extras
 
 # Delete files defined in custom squisher extras list
 VENDOR=$(cat "$OUT"/system/build.prop | grep 'ro.product.brand=' | tr '[:upper:]' '[:lower:]' | sed 's/ro.product.brand=//')
 DEVICE=$(cat "$OUT"/system/build.prop | grep 'ro.build.product=' | tr '[:upper:]' '[:lower:]' | sed 's/ro.build.product=//')
-SQUISHER_EXTRAS_FILE="$ANDROID_BUILD_TOP/device/$VENDOR/$DEVICE/squisher-extras.txt"
+SQUISHER_EXTRAS_FILE="$ANDROID_BUILD_TOP"/device/"$VENDOR"/"$DEVICE"/squisher-extras.txt
+EXTRASDIR=
+EXTRASFILE=
 if [ -f "$SQUISHER_EXTRAS_FILE" ]; then
-    for FILE in `cat "$SQUISHER_EXTRAS_FILE" | grep -v ^# | grep -v ^$`; do
-        EXTRAS="$EXTRAS $FILE"
+    # Delete directories marked with "+" prefix
+    for DIR in `cat "$SQUISHER_EXTRAS_FILE" | grep -v ^# | grep -v ^$ | grep ^+ | sed 's/^+//'`; do
+        EXTRASDIR="$EXTRASDIR $DIR"
     done
-    ( cd "$OUT"/system; echo $EXTRAS | xargs rm -f; )
+    if [ ! -z "$EXTRASDIR" ]; then
+        ( cd "$OUT"/system; echo $EXTRASDIR | xargs rm -rf; )
+    fi
+
+    # Delete individual files
+    for FILE in `cat "$SQUISHER_EXTRAS_FILE" | grep -v ^# | grep -v ^$ | grep -v ^+`; do
+        EXTRASFILE="$EXTRASFILE $FILE"
+    done
+    if [ ! -z "$EXTRASFILE" ]; then
+        ( cd "$OUT"/system; echo $EXTRASFILE | xargs rm -f; )
+    fi
 fi
 
 exit 0
