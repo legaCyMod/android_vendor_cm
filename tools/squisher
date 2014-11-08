@@ -25,7 +25,7 @@ fi
 
 # Optimize PNG resources in APKs
 OPTICHARGER="$ANDROID_BUILD_TOP"/vendor/cm/tools/opticharger
-( cd "$OUT"/system; find framework/ app/ priv-app/ vendor/app/ -name \*.apk -print | $XARGS "$OPTICHARGER"; )
+( cd "$OUT"/system; find framework/ app/ priv-app/ vendor/ app/ -name \*.apk -print | $XARGS "$OPTICHARGER"; )
 
 # Delete files defined in custom squisher extras list
 VENDOR=$(cat "$OUT"/system/build.prop | grep 'ro.product.brand=' | tr '[:upper:]' '[:lower:]' | sed 's/ro.product.brand=//')
